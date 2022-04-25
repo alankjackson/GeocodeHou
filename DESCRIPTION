@@ -1,11 +1,23 @@
 Package: GeocodeHou
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Geocode addresses in Houston using an input address/lat-long file
 Version: 0.1.0
 Author: Alan Jackson
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Maintainer: Alan Jackson <alan@ajackson.org>
+Description: Based on the City of Houston COH PDD ADDRESS POINTS - PDD
+    file that contains over 1 million address and lat/long points, this
+    package will attempt to convert an address into a location.
+License: MIT license
 Encoding: UTF-8
 LazyData: true
+Exports: dt
+Imports:
+    dplyr,
+    tidyr,
+    dtplyr,
+    data.table
+Depends: 
+    R (>= 2.10)
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

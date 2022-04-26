@@ -107,7 +107,7 @@ match_exactly <- function( Street_num, Prefix="", Street_name,
 #' @param  Street_name Name of the street.
 #' @param  Street_type Designation like RD, ST, LN, etc.
 #' @param  Zipcode     The zip code for the address
-#' @param  Distance    The zip code for the address
+#' @param  Distance    The maximum edit distance allowed
 #' @return A tibble will be returned with the Longitude (Lon), Latitude (Lat),
 #'     a success flag  (Success) (T/F), and a Fail code describing why
 #'     the repair attempt failed.
@@ -193,6 +193,51 @@ repair_name <- function( Street_num, Prefix="", Street_name,
 #                        end of repair_name
 ################################################################
 
+#' Try to repair the street type
+#'
+#' We will search in the given zipcode for street types that are available
+#' for the given name, and if we only find one we are done. If there are
+#' more than one, then we will search for the exact address for each.
+#' We will ignore street types likely to fail badly:
+#' * CT
+#' * CIR
+#' On success, the Lat Long will be returned.
+#'
+#' @param  Street_num  Number portion of address.
+#' @param  Prefix      Directional prefix (N, S, E, W) if exists.
+#' @param  Street_name Name of the street.
+#' @param  Street_type Designation like RD, ST, LN, etc.
+#' @param  Zipcode     The zip code for the address
+#' @return A tibble will be returned with the Longitude (Lon), Latitude (Lat),
+#'     a success flag  (Success) (T/F), and a Fail code describing why
+#'     the repair attempt failed.
+#' @examples
+#' repair_type("1311", "", "Tulane", "", "77008")
+repair_type <- function( Street_num, Prefix="", Street_name,
+                         Street_type="", Zipcode) {
+
+  Prefix      <- stringr::str_to_upper(Prefix)
+  Street_name <- stringr::str_to_upper(Street_name)
+  Street_type <- stringr::str_to_upper(Street_type)
+
+  if ((stringr::str_detect(Street_type, "CT")) | # no Court
+      (stringr::str_detect(Street_type, "CIR"))  # no Circle
+     ) {
+
+      return(tibble::tribble(~Lon, ~Lat, ~New_name, ~Success, ~Fail,
+                              0,    0,  "No Name",  FALSE,   "CT or CIR"))
+  }
+  tmp <- dt %>%
+         dplyr::filter(Zipcode==!!Zipcode,
+                       Street_name==!!Street_name,
+                       Prefix==!!Prefix)
+  if (nrow(tmp)>0)
+
+}
+
+################################################################
+#                        end of repair_type
+################################################################
 
 Testme <- function(){
   df <- tibble::as_tibble(dt)

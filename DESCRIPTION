@@ -10,7 +10,8 @@ Description: Based on the City of Houston COH PDD ADDRESS POINTS - PDD
 License: MIT license
 Encoding: UTF-8
 LazyData: true
-Exports: dt
+Exports: dt,
+    df_names_only
 Imports:
     dplyr,
     tidyr,

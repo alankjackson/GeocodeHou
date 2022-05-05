@@ -25,7 +25,7 @@ df_names_only <- dt %>%
 
 usethis::use_data(df_names_only, overwrite = TRUE)
 
-#####     Standard USPS road types
+#####     Standard USPS road types plus SPWY
 
 Allowed_types <- c(
   "ALY", "ANX", "ARC", "AVE", "BYU", "BCH", "BND", "BLF", "BLFS", "BTM", "BLVD",

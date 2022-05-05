@@ -463,6 +463,39 @@ repair_zipcode <- function( Street_num, Prefix="", Street_name,
 #                        end of repair_zipcode
 ################################################################
 
+#' Try to delete stuff after the good address
+#'
+#' We will search for an exact match,  where there are more than 9
+#' points with that address for direction, name, suffix
+#' Return either the input or the cleaned value plus what was rmoved
+#'
+#' @param  Address  Prefix, Name, Type.
+#' @return A tibble will be returned with the:
+#' - Good data (either the input or cleaned input)
+#' - What was removed (may be blank)
+#' @examples
+#' delete_danglers("Tulane ST #5")
+#' @export
+delete_danglers <- function( Address) {
+
+  Address <- stringr::str_to_upper(Address)
+
+  Address <- "BAYBROOK MALL"
+
+  tmp <- df_names_only %>%
+    dplyr::mutate(Address=paste(Prefix, Street_name, Street_type)) %>%
+    dplyr::group_by(Address) %>%
+       summarize(n=sum(n)) %>%
+    dplyr::filter(n>9)
+########    not working
+  foo <- tmp %>%
+    dplyr::filter(stringr::str_detect(!!Address, Address))
+
+}
+
+################################################################
+#                        end of delete_danglers
+################################################################
 
 Testme <- function(){
   Archive_path <- "/home/ajackson/Dropbox/Rprojects/Curated_Data_Files/CoH_Address_Points/"

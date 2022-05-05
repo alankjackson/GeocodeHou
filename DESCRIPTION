@@ -12,6 +12,7 @@ Encoding: UTF-8
 LazyData: true
 Exports: dt,
     df_names_only
+    Allowed_types
 Imports:
     dplyr,
     tidyr,

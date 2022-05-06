@@ -160,7 +160,7 @@ repair_name <- function( Street_num, Prefix="", Street_name,
       if (foo$Success) {
         tmp_new <- rbind(tmp_new, tibble::tribble(~Lon, ~Lat, ~New_name,
                                                   ~Success, ~Fail,
-                                                 foo[i,]$Lon, foo[i,]$Lat,
+                                                 foo$Lon, foo$Lat,
                                                  tmp[i,]$Street_name, TRUE, ""))
       }
     }
@@ -467,9 +467,9 @@ repair_zipcode <- function( Street_num, Prefix="", Street_name,
 #'
 #' We will search for an exact match,  where there are more than 9
 #' points with that address for direction, name, suffix
-#' Return either the input or the cleaned value plus what was rmoved
+#' Return either the input or the cleaned value plus what was removed
 #'
-#' @param  Address  Prefix, Name, Type.
+#' @param  Address:  Prefix, Name, Type.
 #' @return A tibble will be returned with the:
 #' - Good data (either the input or cleaned input)
 #' - What was removed (may be blank)
@@ -480,16 +480,31 @@ delete_danglers <- function( Address) {
 
   Address <- stringr::str_to_upper(Address)
 
-  Address <- "BAYBROOK MALL"
-
   tmp <- df_names_only %>%
     dplyr::mutate(Address=paste(Prefix, Street_name, Street_type)) %>%
     dplyr::group_by(Address) %>%
        summarize(n=sum(n)) %>%
-    dplyr::filter(n>9)
-########    not working
-  foo <- tmp %>%
-    dplyr::filter(stringr::str_detect(!!Address, Address))
+    dplyr::filter(n>9) %>%
+    dplyr::mutate(Address=stringr::str_squish(Address))
+
+########    not finished
+  Output <- NULL
+  for (i in 1:nrow(tmp)) {
+    if(stringr::str_detect(Address, tmp[i,]$Address)){
+      Output <- rbind(Output, tmp[i,])
+      print(tmp[i,])
+    }
+  }
+
+  if (nrow(Output)==1) { # success
+    return(tibble::tribble(~Clean, ~Removed,
+                           Output$Address,
+                           stringr::str_remove(Output$Address, Address)))
+
+  } else {  # fail
+    return(tibble::tribble(~Clean, ~Removed,
+                           Address, ""))
+  }
 
 }
 

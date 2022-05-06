@@ -487,7 +487,6 @@ delete_danglers <- function( Address) {
     dplyr::filter(n>9) %>%
     dplyr::mutate(Address=stringr::str_squish(Address))
 
-########    not finished
   Output <- NULL
   for (i in 1:nrow(tmp)) {
     if(stringr::str_detect(Address, tmp[i,]$Address)){
@@ -499,7 +498,7 @@ delete_danglers <- function( Address) {
   if (nrow(Output)==1) { # success
     return(tibble::tribble(~Clean, ~Removed,
                            Output$Address,
-                           stringr::str_remove(Output$Address, Address)))
+                           stringr::str_remove(Address, Output$Address)))
 
   } else {  # fail
     return(tibble::tribble(~Clean, ~Removed,

@@ -1,7 +1,7 @@
 Package: GeocodeHou
 Type: Package
 Title: Geocode addresses in Houston using an input address/lat-long file
-Version: 0.1.0
+Version: 1.0.0
 Author: Alan Jackson
 Maintainer: Alan Jackson <alan@ajackson.org>
 Description: Based on the City of Houston COH PDD ADDRESS POINTS - PDD

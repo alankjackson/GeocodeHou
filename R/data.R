@@ -1,0 +1,16 @@
+#' Address and Lat Long data table built from City of Houston GIS dept file
+#'
+#' Duplicate addresses (like apartments) have been averaged. For those points
+#' we carry the standard deviation of the location and number of points
+#' We also carry the X,Y locations from the original file, as well as the
+#' ObjectID (or in the case of an averaged point, one of the id's)
+#'
+#'
+#' @format A data table with 1,460,176 rows and 14 variables:
+#' \describe{
+#'   \item{Street_num}{Street Number}
+#'   \item{Prefix}{Directional prefix (N, S, E, W)}
+#'   ...
+#' }
+#' @source \url{https://cohgis-mycity.opendata.arcgis.com/datasets/address-points}
+"dt"

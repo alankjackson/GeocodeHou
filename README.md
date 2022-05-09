@@ -178,7 +178,7 @@ for (i in 1:nrow(Failed_match)){
 }
 ```
 
-##    repair_prefix
+###    repair_prefix
 
 Similar to repairing type, look for all the possible prefixes that match
 the zip code, name, and type for the target. If there is only one, then we

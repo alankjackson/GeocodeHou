@@ -90,6 +90,7 @@ match_exactly <- function( Street_num, Prefix="", Street_name,
 #' - names containing STREET (A STREET, B STREET)
 #' - Number streets (4TH, 5TH, etc)
 #' - County Roads (CR 235)
+#' - Farm-to-Market Roads (FM 1960)
 #'
 #' @param  Street_num  Number portion of address.
 #' @param  Prefix      Directional prefix (N, S, E, W) if exists.
@@ -118,7 +119,8 @@ repair_name <- function( Street_num, Prefix="", Street_name,
   if ((stringr::str_length(Street_name) < 4) | # no short names
       (stringr::str_detect(Street_name, "STREET")) | # no A STREET, etc
       (stringr::str_detect(Street_name, "^\\d+TH")) | # no 4TH, 5TH, etc
-      (stringr::str_detect(Street_name, "^CR \\d+"))) { # no county roads
+      (stringr::str_detect(Street_name, "^CR \\d+"))| # no county roads
+      (stringr::str_detect(Street_name, "^FM \\d+"))) { # no FM roads
 
       return(tibble::tribble(~Lon, ~Lat, ~New_name, ~Success, ~Fail,
                               0,    0,  "No Name",  FALSE,   "Short or Ambiguous"))
@@ -143,6 +145,7 @@ repair_name <- function( Street_num, Prefix="", Street_name,
     dplyr::filter(!stringr::str_detect(Street_name, "STREET")) %>% # eliminate A STREET, B STREET
     dplyr::filter(!stringr::str_detect(Street_name, "^\\d+TH")) %>% # eliminate 4TH, 5TH, etc
     dplyr::filter(!stringr::str_detect(Street_name, "^CR \\d+")) %>%  # eliminate county roads
+    dplyr::filter(!stringr::str_detect(Street_name, "^FM \\d+")) %>%  # eliminate FM roads
     dplyr::filter(Zipcode==!!Zipcode,
                   Street_type==!!Street_type,
                   Prefix==!!Prefix)  %>%
@@ -465,11 +468,12 @@ repair_zipcode <- function( Street_num, Prefix="", Street_name,
 
 #' Try to delete stuff after the good address
 #'
+#' THIS IS EXPERIMENTAL AND NOT WELL TESTED
 #' We will search for an exact match,  where there are more than 9
 #' points with that address for direction, name, suffix
 #' Return either the input or the cleaned value plus what was removed
 #'
-#' @param  Address:  Prefix, Name, Type.
+#' @param  Address :  Prefix, Name, Type.
 #' @return A tibble will be returned with the:
 #' - Good data (either the input or cleaned input)
 #' - What was removed (may be blank)
@@ -483,7 +487,7 @@ delete_danglers <- function( Address) {
   tmp <- df_names_only %>%
     dplyr::mutate(Address=paste(Prefix, Street_name, Street_type)) %>%
     dplyr::group_by(Address) %>%
-       summarize(n=sum(n)) %>%
+       dplyr::summarize(n=sum(n)) %>%
     dplyr::filter(n>9) %>%
     dplyr::mutate(Address=stringr::str_squish(Address))
 
@@ -491,7 +495,7 @@ delete_danglers <- function( Address) {
   for (i in 1:nrow(tmp)) {
     if(stringr::str_detect(Address, tmp[i,]$Address)){
       Output <- rbind(Output, tmp[i,])
-      print(tmp[i,])
+      #print(tmp[i,])
     }
   }
 

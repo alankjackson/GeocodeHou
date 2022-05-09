@@ -384,6 +384,8 @@ repair_number <- function( Street_num, Prefix="", Street_name,
 
   tmp2 <- Interpolator[which.min(abs(Interpolator$Street_num-Target)),]
 
+  #New_lon <- tmp2$Lon-(tmp2$Street_num-Target)*mean(Interpolator$Dx)
+  #New_lat <- tmp2$Lat-(tmp2$Street_num-Target)*mean(Interpolator$Dy)
   New_lon <- tmp2$Lon-(tmp2$Street_num-Target)*tmp2$Dx
   New_lat <- tmp2$Lat-(tmp2$Street_num-Target)*tmp2$Dy
 

@@ -21,6 +21,8 @@
 match_exactly <- function( Street_num, Prefix="", Street_name,
                            Street_type="", Zipcode) {
 
+  if (is.na(Prefix)) {Prefix <- ""}
+  if (is.na(Street_type)) {Street_type <- ""}
   Prefix      <- stringr::str_to_upper(Prefix)
   Street_name <- stringr::str_to_upper(Street_name)
   Street_type <- stringr::str_to_upper(Street_type)
@@ -112,6 +114,8 @@ match_exactly <- function( Street_num, Prefix="", Street_name,
 repair_name <- function( Street_num, Prefix="", Street_name,
                          Street_type="", Zipcode, Distance=2) {
 
+  if (is.na(Prefix)) {Prefix <- ""}
+  if (is.na(Street_type)) {Street_type <- ""}
   Prefix      <- stringr::str_to_upper(Prefix)
   Street_name <- stringr::str_to_upper(Street_name)
   Street_type <- stringr::str_to_upper(Street_type)
@@ -206,6 +210,8 @@ repair_name <- function( Street_num, Prefix="", Street_name,
 repair_type <- function( Street_num, Prefix="", Street_name,
                          Street_type="", Zipcode) {
 
+  if (is.na(Prefix)) {Prefix <- ""}
+  if (is.na(Street_type)) {Street_type <- ""}
   Prefix      <- stringr::str_to_upper(Prefix)
   Street_name <- stringr::str_to_upper(Street_name)
   Street_type <- stringr::str_to_upper(Street_type)
@@ -270,6 +276,7 @@ repair_type <- function( Street_num, Prefix="", Street_name,
 repair_prefix <- function( Street_num, Prefix="", Street_name,
                          Street_type="", Zipcode) {
 
+  if (is.na(Street_type)) {Street_type <- ""}
   Street_name <- stringr::str_to_upper(Street_name)
   Street_type <- stringr::str_to_upper(Street_type)
 
@@ -325,6 +332,7 @@ repair_prefix <- function( Street_num, Prefix="", Street_name,
 repair_number <- function( Street_num, Prefix="", Street_name,
                          Street_type="", Zipcode, Distance=250) {
 
+  if (is.na(Street_type)) {Street_type <- ""}
   Street_name <- stringr::str_to_upper(Street_name)
   Street_type <- stringr::str_to_upper(Street_type)
 
@@ -434,6 +442,7 @@ repair_number <- function( Street_num, Prefix="", Street_name,
 repair_zipcode <- function( Street_num, Prefix="", Street_name,
                             Street_type="", Zipcode) {
 
+  if (is.na(Street_type)) {Street_type <- ""}
   Street_name <- stringr::str_to_upper(Street_name)
   Street_type <- stringr::str_to_upper(Street_type)
 
